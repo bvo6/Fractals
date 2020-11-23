@@ -1,23 +1,22 @@
 # A primitive authenticated remote shell client and server
-The  provided SimpleRShellClient.c and SimpleRShellServer.c are simple remote shell client and server based on TCP. 
-It allows one to use SimpleRShellClient to execute shell commands on a remote machine  running SimpleRShellServer and get execution results  back. However, they do not have any authentication whatsoever.
+The standard remote shell allows one to execute shell commands on a remote machine running and get execution results back. However, they do not have any authentication whatsoever.
 
 • RShellServer1 <port number>   <password file>  will  listen  on  the  specified <port  number>  and  authenticate  the  remote  shell  command  by comparing  the  SHA1  hash  of  the password  provided  by  the  client  with  that  in  the  <password  file>.  If  the  authentication  is successful,  execute  the  shell  command  and  return  the  execution result  back  to  client.  The <password file> should contain one or more line: <ID string>; <hex of SHA1(PW)> 
  
 • RShellClient1 <server IP> <server port number> <ID> <password>  will read  shell  command  from  the  standard  input  (i.e.,  the  keyboard)  and  send  the  shell  command  to the server listening at the <server port number> on <server IP>. It will provide the <ID> and the SHA1 hash of <password> to the server for authentication. 
   
 # Protocol Specification 
- In  order  to  have  the  functionalities  described  above,  you  need  to  implement  the  following  protocol (illustrated in Figure 1) upon TCP between the client and server: 
+ In  order  to  have  the  functionalities  described  above,  you  need  to  implement  the  following  protocol upon TCP between the client and server: 
  
- 1.The client sends a RSHELL_REQ message that includes the client’s ID and the shell command to the server. 
+ 1. The client sends a RSHELL_REQ message that includes the client’s ID and the shell command to the server. 
  
- 2.The  server  responds  with  an AUTH_REQ  message  the  client  –  asking  the  client  to  provide  the password. 
+ 2. The  server  responds  with  an AUTH_REQ  message  the  client  –  asking  the  client  to  provide  the password. 
  
- 3.The  client  sends  an AUTH_RESP  message  to  the  server  –  responding  with  the  SHA1  hash  of  its password.
+ 3. The  client  sends  an AUTH_RESP  message  to  the  server  –  responding  with  the  SHA1  hash  of  its password.
  
- 4.The  server  verifies  the  received  SHA1  hash  with  the  SHA1 hash  of  the  password  in  the <password  file>.  If  it  does  not  match,  the  server  sends  an AUTH_FAIL  message  to  the  client. Otherwise,  a)  the  server  sends  an AUTH_SUCCESS  message  to  the  client;  b)  the  server  executes the  shell  command  from  the  client  and  sends  the  result  back  to  the  client  via RSHELL_RESULTmessage(s). 
+ 4. The  server  verifies  the  received  SHA1  hash  with  the  SHA1 hash  of  the  password  in  the <password  file>.  If  it  does  not  match,  the  server  sends  an AUTH_FAIL  message  to  the  client. Otherwise,  a)  the  server  sends  an AUTH_SUCCESS  message  to  the  client;  b)  the  server  executes the  shell  command  from  the  client  and  sends  the  result  back  to  the  client  via RSHELL_RESULTmessage(s). 
   
- 5.If  the  client  receives AUTH_FAIL  message  from  the  server,  it  should  print  out  an  error  message “Authentication  failed”  and  exit  gracefully.  If  the  client  receives AUTH_SUCESS  message,  it should print out the shell command result received from RSHELL_RESULT message(s). Here the server  may  send  one  or  multiple RSHELL_RESULT  messages  depending  on  the  volume  of  the result. The client should be able to handle multiple RSHELL_RESULT messages. 
+ 5. If  the  client  receives AUTH_FAIL  message  from  the  server,  it  should  print  out  an  error  message “Authentication  failed”  and  exit  gracefully.  If  the  client  receives AUTH_SUCESS  message,  it should print out the shell command result received from RSHELL_RESULT message(s). Here the server  may  send  one  or  multiple RSHELL_RESULT  messages  depending  on  the  volume  of  the result. The client should be able to handle multiple RSHELL_RESULT messages. 
  
  <img src="Sample.png" width="500px" />
  
@@ -27,7 +26,7 @@ It allows one to use SimpleRShellClient to execute shell commands on a remote ma
  
 For  message  AUTH_RESP,  the  SHA1(PW)  is  the  20  byte  (160  bits) SHA1  hash  of  the  ID’s password. Note the SHA1(PW) hash is random binary value, you should treat it as raw byte stream. 
 
-For message RSHELL_RESULT, MR (more result) is a 1-byte field representing if there is any more execution  result  after  the  current  RSHELL_RESULT  message. If  there  is  no  more  execution  result, MR  field  should  be  zero.  Otherwise,  WR  should  be  non-zero.  The  “Execution  Result”  is  simply  the execution result of the shell command at the remote host. Normally it should be printable ascii string. But  it  could  contain  unprintable  char  (e.g.,  if  you  trying  to  display  a  binary  file).  You  want  to  make sure to print every byte in the “Execution Result” even if there is null in the middle. 
+For message RSHELL_RESULT, MR (more result) is a 1-byte field representing if there is any more execution  result  after  the  current  RSHELL_RESULT  message. If  there  is  no  more  execution  result, MR  field  should  be  zero.  Otherwise,  WR  should  be  non-zero. The  “Execution  Result”  is  simply  the execution result of the shell command at the remote host. Normally it should be printable ascii string. But  it  could  contain  unprintable  char  (e.g.,  if  you  trying  to  display  a  binary  file).  You  want  to  make sure to print every byte in the “Execution Result” even if there is null in the middle. 
 
 # Experiments:
 1)create a text mode password file named passwdfile.txt that contains the following line:      
