@@ -51,14 +51,18 @@ For message RSHELL_RESULT, MR (more result) is a 1-byte field representing if th
  
  # Sample Run
   Server establishes a connection using the provided sha1 password.
- <img src="sample1.png" width="300px" />
+  
+ <img src="sample1.png" width="400px" />
  
   Client attempts to connect to the port using invalid ID.
-  <img src="sample2.png" width="300px" />
+  
+  <img src="sample2.png" width="400px" />
  
   Client attempts to connect to the port using invalid password.
-  <img src="sample3.png" width="300px" />
+  
+  <img src="sample3.png" width="400px" />
   
   Successful connection.
-  <img src="sample4.png" width="400px" />
+  
+  <img src="sample4.png" width="500px" />
  
