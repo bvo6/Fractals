@@ -49,4 +49,16 @@ For message RSHELL_RESULT, MR (more result) is a 1-byte field representing if th
    4)ls -l 
   The  server  should  accept  and  execute  any  shell  command  it sends  and  return  the  execution  result to the client. The client should print out the execution result on screen. 
  
+ # Sample Run
+  Server establishes a connection using the provided sha1 password.
+ <img src="sample1.png" width="300px" />
+ 
+  Client attempts to connect to the port using invalid ID.
+  <img src="sample2.png" width="300px" />
+ 
+  Client attempts to connect to the port using invalid password.
+  <img src="sample3.png" width="300px" />
+  
+  Successful connection.
+  <img src="sample4.png" width="400px" />
  
