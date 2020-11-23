@@ -30,12 +30,22 @@ For message RSHELL_RESULT, MR (more result) is a 1-byte field representing if th
 # Experiments:
 1)create a text mode password file named passwdfile.txt that contains the following line:      
   Alice; <hex representation of SHA1(PW)> where “Alice” is a recognized ID, and the PW is “SecretPW”. 
-Note you can obtain the SHA1  of “SecretPW” via appropriate OpenSSL command. 
+  Note you can obtain the SHA1  of “SecretPW” via appropriate OpenSSL command. 
 
-2)run ./RShellServer1 <port num> passwdfile.txt  Here  you  want  to  choose  some random port num between [1025, 65535]. If someone else is using the port num you picked, your server won’t be able to bind it. You can try some other port number. 
+2)run ./RShellServer1 <port num> passwdfile.txt  Here  you  want  to  choose  some random port num between [1025, 65535]. 
+ If someone else is using the port num you picked, your server won’t be able to bind it. You can try some other port number. 
   
-3)run ./RShellClient1  localhost  <port  num>  InvalidID  SecretPW The server should reject any shell command it sends as InvalidID is not defined in the passwdfile.txt 
+3)run ./RShellClient1  localhost  <port  num>  InvalidID  SecretPW 
+ The server should reject any shell command it sends as InvalidID is not defined in the passwdfile.txt 
   
-4)run ./RShellClient1  localhost  <port  num>  Alice  WrongPW The   server should reject any shell command  it sends as the SHA1 hash of WrongPW does not  match that in passwdfile.txt 
+4)run ./RShellClient1  localhost  <port  num>  Alice  WrongPW 
+ The   server should reject any shell command  it sends as the SHA1 hash of WrongPW does not  match that in passwdfile.txt 
   
-5)run ./RShellClient1 localhost <port num> Alice SecretPWand  type  the following shell commands:  1)id 2)date 3)pwd 4)ls -l the  server  should  accept  and  execute  any  shell  command  it sends  and  return  the  execution  result to the client. The client should print out the execution result on screen. 
+5)run ./RShellClient1 localhost <port num> Alice SecretPWand  type  the following shell commands:  
+   1)id 
+   2)date 
+   3)pwd 
+   4)ls -l 
+ The  server  should  accept  and  execute  any  shell  command  it sends  and  return  the  execution  result to the client. The client should print out the execution result on screen. 
+ 
+ 
