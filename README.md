@@ -20,7 +20,8 @@ It allows one to use SimpleRShellClient to execute shell commands on a remote ma
  5.If  the  client  receives AUTH_FAIL  message  from  the  server,  it  should  print  out  an  error  message “Authentication  failed”  and  exit  gracefully.  If  the  client  receives AUTH_SUCESS  message,  it should print out the shell command result received from RSHELL_RESULT message(s). Here the server  may  send  one  or  multiple RSHELL_RESULT  messages  depending  on  the  volume  of  the result. The client should be able to handle multiple RSHELL_RESULT messages. 
  
  <img src="Sample.png" width="500px" />
- # Message Format 
+ 
+# Message Format 
  
  For  message  RSHELL_REQ, the  “Shell  Command”  is  simply  the shell  command  the  client  is  trying to execute at the remote host (e.g., “pwd”). It is null terminated string.  
  
