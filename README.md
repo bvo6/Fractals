@@ -29,20 +29,20 @@ For  message  AUTH_RESP,  the  SHA1(PW)  is  the  20  byte  (160  bits) SHA1  ha
 For message RSHELL_RESULT, MR (more result) is a 1-byte field representing if there is any more execution  result  after  the  current  RSHELL_RESULT  message. If  there  is  no  more  execution  result, MR  field  should  be  zero.  Otherwise,  WR  should  be  non-zero. The  “Execution  Result”  is  simply  the execution result of the shell command at the remote host. Normally it should be printable ascii string. But  it  could  contain  unprintable  char  (e.g.,  if  you  trying  to  display  a  binary  file).  You  want  to  make sure to print every byte in the “Execution Result” even if there is null in the middle. 
 
 # Experiments:
-1)create a text mode password file named passwdfile.txt that contains the following line:      
+1) Create a text mode password file named passwdfile.txt that contains the following line:      
   Alice; <hex representation of SHA1(PW)> where “Alice” is a recognized ID, and the PW is “SecretPW”. 
   Note you can obtain the SHA1  of “SecretPW” via appropriate OpenSSL command. 
 
-2)run ./RShellServer1 <port num> passwdfile.txt  Here  you  want  to  choose  some random port num between [1025, 65535]. 
+2) Run ./RShellServer1 <port num> passwdfile.txt  Here  you  want  to  choose  some random port num between [1025, 65535]. 
  If someone else is using the port num you picked, your server won’t be able to bind it. You can try some other port number. 
   
-3)run ./RShellClient1  localhost  <port  num>  InvalidID  SecretPW 
+3) Run ./RShellClient1  localhost  <port  num>  InvalidID  SecretPW 
  The server should reject any shell command it sends as InvalidID is not defined in the passwdfile.txt 
   
-4)run ./RShellClient1  localhost  <port  num>  Alice  WrongPW 
+4) Run ./RShellClient1  localhost  <port  num>  Alice  WrongPW 
  The   server should reject any shell command  it sends as the SHA1 hash of WrongPW does not  match that in passwdfile.txt 
   
-5)run ./RShellClient1 localhost <port num> Alice SecretPWand  type  the following shell commands:  
+5) Run ./RShellClient1 localhost <port num> Alice SecretPWand  type  the following shell commands:  
    1)id 
    2)date 
    3)pwd 
